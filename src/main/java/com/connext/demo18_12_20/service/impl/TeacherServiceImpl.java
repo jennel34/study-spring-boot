@@ -60,11 +60,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void insertOrUpdate(Teacher teacher) {
-        if (teacher.getId()==null){
+        if (teacher.getId()==null || teacher.getId().equals("")){
             String str = UUID.randomUUID().toString();
             teacher.setId(str);
         }
-        if (teacher.getCourseID()==null)
+        if (teacher.getCourseID()==null || teacher.getCourseID().equals(""))
             teacher.setCourseID("fa99db97-2eb4-4826-b5ed-88286ff833e6");
         teacherRepository.save(teacher);
     }
