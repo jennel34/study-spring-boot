@@ -1,9 +1,14 @@
 package com.connext.demo18_12_20.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 
-public class Teacher {
+@Entity
+@Table(name = "teacher")
+public class Teacher implements Serializable {
     @Id
     @Column(name = "id")
     private String id;
