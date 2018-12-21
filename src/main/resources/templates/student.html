@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        th{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="margin-bottom: 30px">
+        <h1>学生管理界面</h1>
+    </div>
+    <div class="container row">
+        <div class="col-md-11">
+            <div class="form-group">
+                <div class="col-md-11">
+                    <input type="text" class="form-control selectName" id="name" placeholder="请输入学生名称">
+                </div>
+                <input type="button" class="btn btn-primary select" value="查询" onclick="selectStu()">
+            </div>
+        </div>        
+        <div class="col-md-1">
+            <button class="btn btn-primary col-md-0 8" data-toggle="modal" data-target="#myModal">添加</button>
+        </div>
+    </div>
+    <table class="table table-hover" style="text-align: center">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>课程名称</th>
+                <th>课程地址</th>
+                <th>操作1</th>
+                <th>操作2</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        修改界面
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="id" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuName">姓名</label>
+                        <input type="text" class="form-control" id="stuName">
+                    </div>
+                    <div class="form-group">
+                        <label for="stuAge">年龄</label>
+                        <input type="text" class="form-control" id="stuAge">
+                    </div>
+                    <div class="form-group clearfix">
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default" 
+                                data-dismiss="modal">关闭
+                            </button>
+                            <button class="btn btn-primary submitInfo"/>提交</button>                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="" value="11">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>    
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>    
+    <script>
+        $(function(){
+            init()
+            // 初始化
+            function init(){            
+                oninit()
+            }
+        })
+        function oninit(){
+            $.ajax({
+                type: 'get',
+                url: '/student/findAll',
+                success: function(msg){
+                    // console.log(msgList);
+                    applyPage(msg)
+                },
+                error: function(err){
+                    alert('获取列表失败')
+                }
+            })
+        }
+        // 渲染页面
+        function applyPage(msgList){
+            var tr = ""
+            msgList.forEach(element => {
+                tr += `
+                        <tr>
+                            <td>${element.studentName}<input type="hidden" value="${element.id}"></td>
+                            <td>${element.studentAge}</td>
+                            <td>${element.course.courseName}</td>
+                            <td>${element.course.courseAddress}</td>
+                            <td><a href="" class="btn btn-primary modification" onclick="modif(this)" data-toggle="modal" data-target="#myModal">修改</a></td>
+                            <td><a href="" class="btn btn-danger deleteUser" onclick="delUser(this)">删除</a></td>
+                        </tr>
+                    `
+            });
+            $('tbody').html(tr)
+        }
+        function modif(ele){
+            var pTr = $(ele).parents('tr').find('td')
+            $('#id').val($(pTr).eq(0).find('input').val())
+            $('#stuName').val($(pTr).eq(0).text())
+            $('#stuAge').val($(pTr).eq(1).text())
+        }
+        function delUser(ele){
+            var id = $(ele).parents('tr').find('td').eq(0).find('input').val()
+            var mymessage = confirm('你确定删除吗?')
+            if(mymessage == false){
+                return
+            }else {
+            $.ajax({
+                type: 'get',
+                url: '/student/delete?id='+id,
+                success: function(msg){
+                    alert(msg);
+                    oninit();
+                },
+                error: function(err){
+                    alert(err);
+                }
+            })}
+        }
+        function selectStu(){
+            var name = $('#name').val();
+            console.log(name);
+            $.ajax({
+                type: 'get',
+                url: '/student/findAllByName?name='+name,
+                success: function(msg){
+                    applyPage(msg);
+                },
+                error: function(err){
+                    alert(err);
+                }
+            })
+        }
+        $('#myModal').on('hidden.bs.modal', function () {
+            $('#myModal').find('input').each(function(idx){
+                $(this).val("")
+            })
+        })
+        // 添加修改
+        $('.submitInfo').on('click', function(){
+            var stuData = {
+                id: $('#id').val(),
+                studentName: $('#stuName').val(),
+                studentAge: $('#stuAge').val(),
+            }
+            $.ajax({
+                type: 'post',
+                url: '/student/save',
+                data: JSON.stringify(stuData),
+                contentType: 'application/json; charset=UTF-8',
+                success: function(msg){
+                    alert(msg);
+                    oninit();
+                },
+                error: function(err){
+                    alert(err);
+                }
+            })
+            $('#myModal').modal('hide')
+        })
+
+        
+    </script>
+</body>
+</html>
