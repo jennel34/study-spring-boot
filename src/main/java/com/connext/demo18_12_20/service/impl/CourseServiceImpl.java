@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -30,6 +31,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void insertAndUpdate(Course course) {
+        if(course.getId() == null || course.getId().equals("")){
+            course.setId(UUID.randomUUID().toString());
+        }
         courseRepository.save(course);
     }
 }
