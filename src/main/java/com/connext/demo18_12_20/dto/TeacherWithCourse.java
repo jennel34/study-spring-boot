@@ -1,27 +1,13 @@
-package com.connext.demo18_12_20.entity;
+package com.connext.demo18_12_20.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
+import com.connext.demo18_12_20.entity.Course;
 
-@Entity
-@Table(name = "teacher")
-public class Teacher implements Serializable {
-    @Id
-
-    @Column(name = "id")
+public class TeacherWithCourse {
     private String id;
-
-    @Column(name = "teacher_name")
     private String teacherName;
-
-    @Column(name = "teacher_age")
     private int teacherAge;
-
-    @Column(name = "course_id")
     private String courseID;
+    private Course course;
 
     public String getId() {
         return id;
@@ -55,13 +41,22 @@ public class Teacher implements Serializable {
         this.courseID = courseID;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
     @Override
     public String toString() {
-        return "Teacher{" +
+        return "TeacherWithCourse{" +
                 "id='" + id + '\'' +
                 ", teacherName='" + teacherName + '\'' +
                 ", teacherAge=" + teacherAge +
                 ", courseID='" + courseID + '\'' +
+                ", course=" + course +
                 '}';
     }
 }
