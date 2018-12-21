@@ -28,6 +28,9 @@ public class StudnetServiceImpl implements StudentService {
         if(student.getId() == null || student.getId().equals("")){
             student.setId(UUID.randomUUID().toString());
         }
+        if(student.getCourseID() == null || student.getCourseID().equals("")){
+            student.setCourseID("9406accf-31fa-40bf-9293-9d9574e4c35d");
+        }
         studentRepository.save(student);
     }
 

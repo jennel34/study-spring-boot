@@ -36,5 +36,9 @@ public class CourseController {
         return courseService.findAllByCourseName(name);
     }
 
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    public void delete(String id){
+        courseService.deleteById(id);
+    }
 
 }

@@ -6,6 +6,7 @@ import com.connext.demo18_12_20.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course findById(String id) {
-        return courseRepository.getOne(id);
+        return courseRepository.findById(id).get();
     }
 }
