@@ -9,4 +9,5 @@ public interface CourseService {
     List<Course> findAllByCourseName(String courseName);
     void deleteById(String id);
     void insertAndUpdate(Course course);
+    Course findById(String id);
 }
