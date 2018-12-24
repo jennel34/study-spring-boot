@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class StudnetServiceImpl implements StudentService {
+public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
     @Override
@@ -20,7 +20,8 @@ public class StudnetServiceImpl implements StudentService {
 
     @Override
     public List<Student> findAllByStudentName(String studentName) {
-        return studentRepository.findAllByStudentNameLike(studentName);
+        String str = "%"+studentName+"%";
+        return studentRepository.findAllByStudentNameLike(str);
     }
 
     @Override
