@@ -52,12 +52,14 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @ResponseBody
     public String insert(@RequestBody Student student){
         studentService.insertAndUpdate(student);
         return "success";
     }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete",method = RequestMethod.GET)
+    @ResponseBody
     public String delete(String id){
         studentService.deleteById(id);
         return "success";

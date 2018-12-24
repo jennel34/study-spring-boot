@@ -64,6 +64,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <input type="hidden" class="form-control" id="id" disabled>
+                        <input type="hidden" class="form-control" id="courseId" disabled>
                     </div>
                     <div class="form-group">
                         <label for="stuName">姓名</label>
@@ -72,6 +73,7 @@
                     <div class="form-group">
                         <label for="stuAge">年龄</label>
                         <input type="text" class="form-control" id="stuAge">
+
                     </div>
                     <div class="form-group clearfix">
                         <div class="pull-right">
@@ -117,10 +119,10 @@
                         <tr>
                             <td>${element.studentName}<input type="hidden" value="${element.id}"></td>
                             <td>${element.studentAge}</td>
-                            <td>${element.course.courseName}</td>
+                            <td>${element.course.courseName}<input type="hidden" value="${element.course.id}"></td>
                             <td>${element.course.courseAddress}</td>
-                            <td><a href="" class="btn btn-primary modification" onclick="modif(this)" data-toggle="modal" data-target="#myModal">修改</a></td>
-                            <td><a href="" class="btn btn-danger deleteUser" onclick="delUser(this)">删除</a></td>
+                            <td><a href="javascript:;" class="btn btn-primary modification" onclick="modif(this)" data-toggle="modal" data-target="#myModal">修改</a></td>
+                            <td><a href="javascript:;" class="btn btn-danger deleteUser" onclick="delUser(this)">删除</a></td>
                         </tr>
                     `
             });
@@ -131,6 +133,7 @@
             $('#id').val($(pTr).eq(0).find('input').val())
             $('#stuName').val($(pTr).eq(0).text())
             $('#stuAge').val($(pTr).eq(1).text())
+            $('#courseId').val($(pTr).eq(2).find('input').val())
         }
         function delUser(ele){
             var id = $(ele).parents('tr').find('td').eq(0).find('input').val()
@@ -138,17 +141,18 @@
             if(mymessage == false){
                 return
             }else {
-            $.ajax({
-                type: 'get',
-                url: '/student/delete?id='+id,
-                success: function(msg){
-                    alert(msg);
-                    oninit();
-                },
-                error: function(err){
-                    alert(err);
-                }
-            })}
+                $.ajax({
+                    type: 'get',
+                    url: '/student/delete?id='+id,
+                    success: function(msg){
+                        alert(msg);
+                        oninit();
+                    },
+                    error: function(err){
+                        alert(err);
+                    }
+                })
+            }
         }
         function selectStu(){
             var name = $('#name').val();
@@ -175,6 +179,7 @@
                 id: $('#id').val(),
                 studentName: $('#stuName').val(),
                 studentAge: $('#stuAge').val(),
+                courseID: $('#courseId').val(),
             }
             $.ajax({
                 type: 'post',
