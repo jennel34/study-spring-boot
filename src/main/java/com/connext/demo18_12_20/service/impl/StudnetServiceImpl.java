@@ -20,7 +20,7 @@ public class StudnetServiceImpl implements StudentService {
 
     @Override
     public List<Student> findAllByStudentName(String studentName) {
-        return studentRepository.findAllByStudentName(studentName);
+        return studentRepository.findAllByStudentNameLike(studentName);
     }
 
     @Override

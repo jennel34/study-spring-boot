@@ -5,6 +5,7 @@ import com.connext.demo18_12_20.entity.Course;
 import com.connext.demo18_12_20.entity.Student;
 import com.connext.demo18_12_20.service.CourseService;
 import com.connext.demo18_12_20.service.StudentService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +46,8 @@ public class StudentController {
         for (Student s:students) {
             Course c = courseService.findById(s.getCourseID());
             StudentWithCourse swc = new StudentWithCourse();
-            swc.setId(s.getId());swc.setStudentName(s.getStudentName());swc.setStudentAge(s.getStudentAge());swc.setCourse(c);
+            BeanUtils.copyProperties(s,swc);
+            swc.setCourse(c);
             list.add(swc);
         }
         return list;
